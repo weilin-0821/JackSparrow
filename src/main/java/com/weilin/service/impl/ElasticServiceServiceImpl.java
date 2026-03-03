@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import com.weilin.config.DataSourceConfig;
 import com.weilin.service.ElasticSearchService;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -27,7 +28,7 @@ import java.io.IOException;
 public class ElasticServiceServiceImpl implements ElasticSearchService {
 
     @Autowired
-    private RestHighLevelClient esRestClient;
+    private DataSourceConfig  dataSourceConfig;
 
     /**
      * 查询索引映射
@@ -38,7 +39,8 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
     public JSONObject getMapping(String indexName) throws IOException {
         GetMappingsRequest request = new GetMappingsRequest();
         request.indices(indexName);
-        GetMappingsResponse response = esRestClient
+        GetMappingsResponse response = dataSourceConfig
+                .getESClient("elasticName")
                 .indices()
                 .getMapping(request, RequestOptions.DEFAULT);
         JSONObject jsonObject = JSON.parseObject(
@@ -67,7 +69,9 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
             indexRequest.source(jsonArray.getJSONObject(i).toString(), XContentType.JSON);
             request.add(indexRequest);
         }
-        BulkResponse response=esRestClient.bulk(request, RequestOptions.DEFAULT);
+        BulkResponse response=dataSourceConfig
+                .getESClient("elasticName")
+                .bulk(request, RequestOptions.DEFAULT);
         return response.getItems().length;
     }
 
@@ -88,7 +92,9 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
         }
         searchSourceBuilder.query(boolQueryBuilder);
         searchRequest.source(searchSourceBuilder);
-        SearchResponse searchResponse=esRestClient.search(searchRequest, RequestOptions.DEFAULT);
+        SearchResponse searchResponse=dataSourceConfig
+                .getESClient("elasticName")
+                .search(searchRequest, RequestOptions.DEFAULT);
         JSONArray jsonArray = new JSONArray();
         searchResponse.getHits().forEach(searchHit -> {
             JSONObject jsonObject = JSON.parseObject(searchHit.getSourceAsString());

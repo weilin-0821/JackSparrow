@@ -7,9 +7,6 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-/**
- *
- */
 public class JSONUtils {
     public static JSONArray getJSONArrayFromFile(String fileName) {
         JSONArray jsonArray = new JSONArray();

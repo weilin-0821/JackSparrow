@@ -1,0 +1,9 @@
+[
+  {
+    "sourceType":"ElasticSearch" ,
+    "sourceName":"elasticName",
+    "hostname":"localhost",
+    "port":9200,
+    "scheme":"http"
+  }
+]
