@@ -1,9 +1,22 @@
 [
   {
-    "sourceType":"ElasticSearch" ,
+    "sourceType":"elasticSearch" ,
     "sourceName":"elasticName",
-    "hostname":"localhost",
+    "host":"localhost",
     "port":9200,
     "scheme":"http"
+  },
+  {
+    "sourceType":"redis",
+    "sourceName":"redisName",
+    "host": "localhost",
+    "port": 6379,
+    "password":"",
+    "params": {
+      "timeOut": 2000,
+      "maxTotal": 5,
+      "maxIdle": 3,
+      "minIdle": 2
+    }
   }
 ]

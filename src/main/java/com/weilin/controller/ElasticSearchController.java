@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-@RequestMapping("/es")
+@RequestMapping("/elasticSearch")
 @RestController
 public class ElasticSearchController {
     @Autowired
