@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.weilin.config.DataSourceConfig;
 import com.weilin.service.ElasticSearchService;
+import jakarta.annotation.Resource;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;

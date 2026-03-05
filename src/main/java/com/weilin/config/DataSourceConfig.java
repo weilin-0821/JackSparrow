@@ -24,7 +24,7 @@ public class DataSourceConfig implements InitializingBean {
 
     private ConcurrentHashMap<String, RestHighLevelClient> esClientMap;
 
-    private ConcurrentHashMap<String, Jedis> jedisMap;
+    private ConcurrentHashMap<String, JedisPool> jedisMap;
 
     /**
      * 读取es的配置信息存放到esClientMap
@@ -42,7 +42,8 @@ public class DataSourceConfig implements InitializingBean {
                     esClientMap.put(jsonObject.getString("sourceName"), newESClient(jsonObject));
                     break;
                 case "redis":
-                    jedisMap.put(jsonObject.getString("sourceName"),newRedisClient(jsonObject))    ;
+                    jedisMap.put(jsonObject.getString("sourceName"),newJedisPool(jsonObject));
+                    break;
                 default:
                     System.out.println("dataSource.json 存在问题请检查");
                     break;
@@ -76,7 +77,7 @@ public class DataSourceConfig implements InitializingBean {
     }
 
     /**
-     * 获取 Jedis
+     * 返回 JedisPool
      * @param param {
      *     sourceType:数据源类型,
      *     "sourceName":数据源名称,
@@ -89,9 +90,9 @@ public class DataSourceConfig implements InitializingBean {
      *       "maxIdle": 最大空闲连接,
      *       "minIdle": 最小空闲连接
      *     }
-     * @return Jedis
+     * @return JedisPool
      */
-    private Jedis newRedisClient(JSONObject param){
+    private JedisPool newJedisPool(JSONObject param){
         JSONObject otherParams = param.getJSONObject("params");
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxTotal(otherParams.getInteger("maxTotal")); // 最大连接数
@@ -103,14 +104,14 @@ public class DataSourceConfig implements InitializingBean {
                     param.getString("host"),
                     param.getInteger("port"),
                     otherParams.getInteger("timeOut")
-            ).getResource();
+            );
         }else {
             return new JedisPool(jedisPoolConfig,
                     param.getString("host"),
                     param.getInteger("port"),
                     otherParams.getInteger("timeOut"),
                     param.getString("password")
-            ).getResource();
+            );
         }
     }
 
@@ -120,6 +121,6 @@ public class DataSourceConfig implements InitializingBean {
      * @return Jedis
      */
     public  Jedis getJedis(String sourceName){
-        return jedisMap.get(sourceName);
+        return jedisMap.get(sourceName).getResource();
     }
 }
