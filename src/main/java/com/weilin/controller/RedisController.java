@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.weilin.config.DataSourceConfig;
 import com.weilin.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,4 +35,5 @@ public class RedisController {
         result.setMessage( jedis.get(param.getString("key")));
         return result;
     }
+
 }
