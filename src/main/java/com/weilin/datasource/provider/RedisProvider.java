@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.Objects;
+
 @MiddlewareType("redis")
 @Component
 public class RedisProvider implements DataSourceProvider {
@@ -16,21 +18,22 @@ public class RedisProvider implements DataSourceProvider {
     public Object create(JSONObject config) {
         JSONObject params = config.getJSONObject("params");
         JedisPoolConfig poolConfig = new JedisPoolConfig();
-
-        poolConfig.setMaxTotal(
-                params.getInteger(ConfigKeyEnum.MAX_TOTAL.getKey()));
-
-        poolConfig.setMaxIdle(
-                params.getInteger(ConfigKeyEnum.MAX_IDLE.getKey()));
-
-        poolConfig.setMinIdle(
-                params.getInteger(ConfigKeyEnum.MIN_IDLE.getKey()));
-
-        return new JedisPool(
-                poolConfig,
-                config.getString(ConfigKeyEnum.HOST.getKey()),
-                config.getInteger(ConfigKeyEnum.PORT.getKey()),
-                params.getInteger(ConfigKeyEnum.TIMEOUT.getKey()),
-                config.getString(ConfigKeyEnum.PASSWORD.getKey())
-        );    }
+        poolConfig.setMaxTotal(params.getInteger(ConfigKeyEnum.MAX_TOTAL.getKey()));
+        poolConfig.setMaxIdle(params.getInteger(ConfigKeyEnum.MAX_IDLE.getKey()));
+        poolConfig.setMinIdle(params.getInteger(ConfigKeyEnum.MIN_IDLE.getKey()));
+        // 如果有密码，在创建JedisPool时传入
+        if(Objects.equals(config.getString("password"), "")) {
+            return new JedisPool(poolConfig,
+                    config.getString("host"),
+                    config.getInteger("port"),
+                    params.getInteger("timeOut")
+            );
+        }else {
+            return new JedisPool(poolConfig,
+                    config.getString("host"),
+                    config.getInteger("port"),
+                    params.getInteger("timeOut"),
+                    config.getString("password")
+            );
+        }   }
 }

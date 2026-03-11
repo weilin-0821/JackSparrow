@@ -3,11 +3,11 @@ package com.weilin.config;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.weilin.utils.JSONUtils;
+import jakarta.annotation.PostConstruct;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 读取所有数据库配置
  */
 @Configuration
-public class DataSourceConfig implements InitializingBean {
+public class DataSourceConfig {
 
     private ConcurrentHashMap<String, RestHighLevelClient> esClientMap;
 
@@ -29,7 +29,7 @@ public class DataSourceConfig implements InitializingBean {
     /**
      * 读取es的配置信息存放到esClientMap
      */
-    @Override
+    @PostConstruct
     public void afterPropertiesSet(){
         esClientMap=new ConcurrentHashMap<>();//初始化es
         jedisMap=new ConcurrentHashMap<>();//初始化redis

@@ -2,7 +2,6 @@ package com.weilin.datasource;
 
 import com.weilin.annotation.MiddlewareType;
 import jakarta.annotation.PostConstruct;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +21,17 @@ public class ProviderRegistry {
 
     @PostConstruct
     public void init() {
-
+        /**
+         * 从容器中读取所有带有@MiddlewareType标签的Bean
+         * 有@Component就在容器中了
+         */
         Map<String,Object> beans =
                 context.getBeansWithAnnotation(MiddlewareType.class);
         for(Object bean : beans.values()){
-            MiddlewareType annotation =
-                    bean.getClass().getAnnotation(MiddlewareType.class);
+            /**
+             * 获取类上的 MiddlewareType 注解
+             */
+            MiddlewareType annotation = bean.getClass().getAnnotation(MiddlewareType.class);
             providerMap.put(annotation.value(),(DataSourceProvider) bean);
         }
     }

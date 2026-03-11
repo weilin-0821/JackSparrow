@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.weilin.config.DataSourceConfig;
+import com.weilin.datasource.DataSourceManager;
 import com.weilin.service.ElasticSearchService;
-import jakarta.annotation.Resource;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -29,7 +28,7 @@ import java.io.IOException;
 public class ElasticServiceServiceImpl implements ElasticSearchService {
 
     @Autowired
-    private DataSourceConfig  dataSourceConfig;
+    private DataSourceManager dataSourceManager;
 
     /**
      * 查询索引映射
@@ -40,8 +39,8 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
     public JSONObject getMapping(String indexName) throws IOException {
         GetMappingsRequest request = new GetMappingsRequest();
         request.indices(indexName);
-        GetMappingsResponse response = dataSourceConfig
-                .getESClient("elasticName")
+        RestHighLevelClient client=dataSourceManager.get("elasticName");
+        GetMappingsResponse response = client
                 .indices()
                 .getMapping(request, RequestOptions.DEFAULT);
         JSONObject jsonObject = JSON.parseObject(
@@ -70,8 +69,8 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
             indexRequest.source(jsonArray.getJSONObject(i).toString(), XContentType.JSON);
             request.add(indexRequest);
         }
-        BulkResponse response=dataSourceConfig
-                .getESClient("elasticName")
+        RestHighLevelClient client=dataSourceManager.get("elasticName");
+        BulkResponse response=client
                 .bulk(request, RequestOptions.DEFAULT);
         return response.getItems().length;
     }
@@ -93,8 +92,8 @@ public class ElasticServiceServiceImpl implements ElasticSearchService {
         }
         searchSourceBuilder.query(boolQueryBuilder);
         searchRequest.source(searchSourceBuilder);
-        SearchResponse searchResponse=dataSourceConfig
-                .getESClient("elasticName")
+        RestHighLevelClient client=dataSourceManager.get("elasticName");
+        SearchResponse searchResponse=client
                 .search(searchRequest, RequestOptions.DEFAULT);
         JSONArray jsonArray = new JSONArray();
         searchResponse.getHits().forEach(searchHit -> {
