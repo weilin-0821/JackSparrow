@@ -1,7 +1,7 @@
 package com.weilin.datasource.provider;
 
 import com.alibaba.fastjson.JSONObject;
-import com.weilin.annotation.MiddlewareType;
+import com.weilin.common.annotation.MiddlewareType;
 import com.weilin.datasource.DataSourceProvider;
 import com.weilin.enums.ConfigKeyEnum;
 import org.springframework.stereotype.Component;

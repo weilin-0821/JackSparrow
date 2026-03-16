@@ -1,4 +1,4 @@
-package com.weilin.annotation;
+package com.weilin.common.annotation;
 
 import java.lang.annotation.*;
 

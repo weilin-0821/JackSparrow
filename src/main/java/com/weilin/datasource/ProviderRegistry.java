@@ -1,6 +1,6 @@
 package com.weilin.datasource;
 
-import com.weilin.annotation.MiddlewareType;
+import com.weilin.common.annotation.MiddlewareType;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;

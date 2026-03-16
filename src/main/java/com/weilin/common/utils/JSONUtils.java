@@ -1,4 +1,4 @@
-package com.weilin.utils;
+package com.weilin.common.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.io.IOUtils;

@@ -3,12 +3,11 @@ package com.weilin.datasource;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.weilin.enums.ConfigKeyEnum;
-import com.weilin.utils.JSONUtils;
+import com.weilin.common.utils.JSONUtils;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -2,7 +2,7 @@ package com.weilin.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.weilin.utils.JSONUtils;
+import com.weilin.common.utils.JSONUtils;
 import jakarta.annotation.PostConstruct;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
